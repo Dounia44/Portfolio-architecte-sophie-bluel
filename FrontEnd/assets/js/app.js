@@ -1,5 +1,5 @@
 app.js
-import {getWorks } from "./api.js";
+import { getCategories, getWorks } from "./api.js";
 
 function affichageWorks(works) {
     const gallery = document.querySelector(".gallery");
@@ -13,3 +13,11 @@ function affichageWorks(works) {
     `;
 });
 }
+async function init() {
+   const works = await getWorks();
+   const categories = await getCategories();
+   affichageWorks(works);
+   console.log(works, categories);
+}
+
+init();
