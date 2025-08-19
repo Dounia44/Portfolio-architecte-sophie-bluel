@@ -15,14 +15,55 @@ function affichageWorks(works) {
     figure.appendChild(img);                                        // Ajoute (img) dans <figure>
     figure.appendChild(caption);                                    // Ajoute (caption) dans <figure>                                
     gallery.appendChild(figure);                                    // Ajoute le <figure> complet dans la galerie
-});
+    });
+}
+
+function affichageFilter(categories, works) {
+    const filtresContainer = document.querySelector(".filters");
+    
+    // Nettoyer le container (pour éviter d’avoir le bouton "Modèle" affiché en plus)
+    filtresContainer.replaceChildren();
+
+    // Ajouter le bouton "Tous"
+    const btnTous = document.createElement("button");                 // Crée une **copie complète** (true = avec tous les enfants et attributs) du bouton modèle templateButton et la stocke dans la variable btnTous.
+    btnTous.textContent = "Tous";
+    btnTous.classList.add("filter", "active");
+    filtresContainer.appendChild(btnTous);
+    
+    // Ajouter les autres filtres   
+    categories.forEach((category) => {
+        const btn = document.createElement("button");
+        btn.textContent = category.name;
+        btn.classList.add("filter");
+        filtresContainer.appendChild(btn);
+    });
+
+    // Écouteurs de clic sur tous les boutons
+    const buttons = filtresContainer.querySelectorAll("button");       // Sélectionne tous les boutons à l'intérieur du conteneur de filtres
+    buttons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                // Retirer la classe "active" de tous les boutons
+                buttons.forEach(button =>button.classList.remove("active"));
+                btn.classList.add("active");
+
+                // Filtrer les travaux
+                if (btn.textContent === "Tous") {
+                    affichageWorks(works);
+                } else {
+                    const filteredWorks = works.filter(work => work.category.name === btn.textContent);
+                    affichageWorks(filteredWorks);
+                }
+            } )
+    })
 }
 
 async function init() {
     const works = await getWorks();
     const categories = await getCategories();
+
+    affichageFilter(categories, works);
     affichageWorks(works);
     console.log(works, categories);
 }
 
-init(); 
+init();
