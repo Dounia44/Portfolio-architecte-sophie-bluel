@@ -94,6 +94,15 @@ h2{
 	font-size: 30px;
 	color: #1D6154;
 }
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	font-weight: 700;
+}
+
 nav ul {
 	display: flex;
 	align-items: center;
@@ -105,6 +114,10 @@ nav li {
 	font-size: 1.2em;
 }
 
+.insta-img {
+	height: auto;
+	width: 22px;
+}
 li:hover {
 	color: #B1663C;
 }
