@@ -9,16 +9,22 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<script type="module" src="./assets/js/app.js" defer></script>
+	<script type="module" src="./assets/js/admin.js" defer></script>
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
+<div id="barre-edition" class="hidden">
+	<img src="./assets/icons/edition.png" alt="Icône édition">
+	<p>Mode édition</p>
+</div>
 <header>
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
 		<ul>
 			<li><a href="index.html">projets</a></li>
 			<li><a href="#">contact</a></li>
-			<li><a href="login.html">login</a></li>
+			<li class="nav-login"><a href="login.html">login</a></li>
+			<li class="nav-logout hidden"><a href="#">logout</a></li>
 			<li><a href="#"><img src="./assets/icons/instagram.png" alt="Instagram" class="insta-img"></a></li>
 		</ul>
 	</nav>
@@ -36,7 +42,10 @@
 		</article>
 	</section>
 	<section id="portfolio">
+		<div class="portfolio-title">
 		<h2>Mes Projets</h2>
+		<button id="btn-edition" class="hidden"><img src="./assets/icons/edition2.svg"> modifier</button>
+		</div>
 		<div class="filters"></div>
 		<div class="gallery"></div>
 	</section>

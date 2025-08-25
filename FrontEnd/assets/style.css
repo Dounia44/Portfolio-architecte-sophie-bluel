@@ -54,7 +54,6 @@ html, body {
 body {
 	display: flex;
 	flex-direction: column;
-	/**min-height: 100px;**/
 	max-width: 1140px;
 	margin:auto;
 	font-family: 'Work Sans' ;
@@ -96,21 +95,23 @@ h2{
 }
 
 a {
+	color: inherit;
 	text-decoration: none;
 }
 
-a:hover {
-	font-weight: 700;
+.hidden {
+	display: none !important;
 }
 
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
+	gap: 42px;
 }
+
 nav li {
-	padding: 0 10px;
+	/* padding: 0 10px; */
 	font-size: 1.2em;
 }
 
@@ -119,7 +120,7 @@ nav li {
 	width: 22px;
 }
 li:hover {
-	color: #B1663C;
+	font-weight: 700;
 }
 #introduction {
 	display: flex;
@@ -146,8 +147,22 @@ li:hover {
 }
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
 }
+
+.portfolio-title {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 32px;
+	margin-bottom: 50px;
+}
+
+.portfolio-title button {
+	all: unset;
+	cursor: pointer;
+	box-sizing: border-box;
+}
+
 .filters {
 	display: flex;
 	justify-content: center;
@@ -250,11 +265,24 @@ footer nav ul {
 	background-color: white;
 }
 
-#login .error {
-	background-color: #f9e5e5;   
+#login .error {  
 	font-weight: bold;
 	font-family: Work Sans;
 	font-size: 1em;  
 	padding: 8px;
 	
+}
+
+/* Barre noire en haut */
+#barre-edition {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 59px;
+	background-color: #000;
+	color: #FFF;
+	font-size: 16px;
+	font-weight: 400;
+	gap: 12px;
 }
