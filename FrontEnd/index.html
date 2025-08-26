@@ -10,6 +10,7 @@
 	<meta name="description" content="">
 	<script type="module" src="./assets/js/app.js" defer></script>
 	<script type="module" src="./assets/js/admin.js" defer></script>
+	<script type="module" src="./assets/js/modal.js" defer></script>
 	<link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
@@ -63,7 +64,6 @@
 		</form>
 	</section>
 </main>
-
 <footer>
 	<nav>
 		<ul>
@@ -71,5 +71,18 @@
 		</ul>
 	</nav>
 </footer>
+
+<aside id="modal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="titlemodal">
+	<div class="modal-wrapper">
+		<button class="modal-close" aria-label="Fermer la modale">
+			<img src="./assets/icons/close.svg" alt="Icône close">
+		</button>
+		<h3 id="titlemodal">Galerie photo</h3>
+		<div class="modal-gallery"></div>
+		<hr class="separator">
+		<button class="btn add-photo">Ajouter une photo</button>
+	</div>
+</aside>
+
 </body>
 </html>
