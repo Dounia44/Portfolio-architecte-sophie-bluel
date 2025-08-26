@@ -329,8 +329,18 @@ footer nav ul {
 }
 
 .modal-gallery {
-  display: flex;
-  flex-wrap: wrap;
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	column-gap: 10px;
+	row-gap: 29px;
+}	
+
+.modal-gallery .photo-modal-gallery {
+	width: 100%;
+	height: 102px;
+	object-fit: cover;
+	display: block;
 }
 
 .separator {
@@ -339,10 +349,12 @@ footer nav ul {
 	border-top: 1px solid rgba(179, 179, 179, 1);
 	margin-bottom: 10px;
 	width: 420px;
-	
 }
 
 .btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	font-size: 1em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
@@ -352,9 +364,28 @@ footer nav ul {
 	color: white;
 	background-color: #1D6154;
 	margin : 2em auto ;
-	
 	width: 237px;
 	text-align: center;
 	border-radius: 60px ;
 	cursor: pointer;
+}
+
+.modal-gallery figure {
+	position: relative;
+	width: 100%;
+}
+
+.btn-delete {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+	padding: 0;
+}
+
+.btn-delete img {
+	width: 100%;
+	margin: 0;
 }
