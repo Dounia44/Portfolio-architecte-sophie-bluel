@@ -389,3 +389,89 @@ footer nav ul {
 	width: 100%;
 	margin: 0;
 }
+
+/*Vue 2 : passer de Galerie au formulaire-*/
+.modal-form {width: 100%;}
+
+.modal-form .upload-form {
+	display: flex;
+	flex-direction: column;
+
+}
+
+.upload-form input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	padding-left: 10px;
+}
+
+.upload-form label {
+	margin: 2em 0 1em 0;
+	font-weight: 500;
+}
+
+.upload-form select {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-image: url(./icons/chevron.svg);
+    background-repeat: no-repeat;
+    background-position: right 30px center;
+	padding-left: 10px;
+	padding-right: 52px;
+	margin-bottom: 47px;
+}
+
+.modal-back {
+	position: absolute;
+    top: 26px;
+    left: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#title {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.upload-zone{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	height: 169px;
+	background-color: #E8F1F6;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.upload-btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 36px;
+	border-radius: 50px;
+	color: #306685;
+	background-color: #CBD6DC;
+	padding: 0 33px;
+}
+
+.upload-info{
+	color: #444444;
+	font-size: 10px;
+}
+
+.upload-icon {
+	margin-bottom: 4px;
+}
