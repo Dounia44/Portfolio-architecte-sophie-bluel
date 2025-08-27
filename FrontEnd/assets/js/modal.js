@@ -80,3 +80,33 @@ function afficherPhotos(photos) {
 			modalGallery.appendChild(figure);
 	});
 }
+// ------Clic sur "Ajouter une photo" : bascule de la galerie vers le formulaire-----*/
+
+// Sélection des éléments du DOM 
+const btnAdd = document.querySelector(".btn.add-photo");
+const modalGalleryView = document.querySelector(".modal-gallery-view");
+const modalForm  = document.querySelector(".modal-form");
+const btnBack = document.querySelector(".modal-back");
+const modalTitle = document.getElementById("titlemodal")
+
+// Gestion du clic sur le bouton "Ajouter une photo"
+btnAdd.addEventListener("click", () => {
+	modalGalleryView.classList.add("hidden");           // cache la galerie
+	modalForm.classList.remove("hidden");              // affiche le formulaire
+	btnBack.classList.remove("hidden");					// Rend le bouton Retour visible
+
+	modalTitle.textContent = "Ajout photo"; // CHANGE le titre pour le formulaire
+});
+
+// ------Clic sur "Retour" : bascule du formulaire vers la galerie----------*/
+
+// Écoute du clic sur le bouton Retour
+btnBack.addEventListener("click", () => {
+	modalForm.classList.add("hidden");			  		//cacher le formulaire
+	modalGalleryView.classList.remove("hidden");		//afficher la galerie
+	btnBack.classList.add("hidden");					// Cache le bouton Retour
+
+	modalTitle.textContent = "Galerie photo"; 
+});
+
+
