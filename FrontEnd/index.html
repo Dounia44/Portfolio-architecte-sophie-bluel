@@ -73,14 +73,44 @@
 </footer>
 <aside id="modal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="titlemodal">
 	<div class="modal-wrapper">
+
 		<button class="modal-close" aria-label="Fermer la modale">
 			<img src="./assets/icons/close.svg" alt="Icône close">
 		</button>
+		<button class="modal-back hidden">
+			<img src="./assets/icons/back.svg" alt="Retour">
+		</button>
+
 		<h3 id="titlemodal">Galerie photo</h3>
+	<!-- Vue 1 : Galerie -->
 		<div class="modal-gallery-view">
-			<div class="modal-gallery"></div>
+			<div class="modal-gallery "></div>
 			<hr class="separator">
 			<button class="btn add-photo">Ajouter une photo</button>
+		</div>
+
+	<!-- Vue 2 : Formulaire-->
+		<div class="modal-form hidden">
+			<form action="" class="upload-form">
+				<label for="">
+					<span class="upload-zone">
+						<img src="./assets/icons/picture.svg" alt="" class="upload-icon">
+						<span class="upload-btn">+ Ajouter photo</span>
+						<span class="upload-info">jpg, png : 4mo max</span>
+					</span>
+				</label>
+				<label for="title">Titre</label>
+				<input type="text" id="title" name="title" required>
+				<label for="category">Catégorie</label>
+				<select id="category" name="category" required>
+					<option value=""></option>
+					<option value="1">Objets</option>
+					<option value="2">Appartements</option>
+					<option value="3">Hotels & restaurants</option>
+				</select>
+				<hr class="separator">
+				<button type="submit" class="btn upload" disabled>Valider</button>
+			</form>
 		</div>
 	</div>
 </aside>
