@@ -18,7 +18,8 @@ btnEdition.addEventListener("click", async () => {
         const works = await getWorks(); 	
 
 		// Affiche les images dans la galerie de la modale
-        afficherPhotos(works);     
+        afficherPhotos(works);
+		addDeleteListeners();
 
     } catch (error) {
         console.error("Erreur lors du chargement des photos :", error);
@@ -81,6 +82,7 @@ function afficherPhotos(photos) {
 			modalGallery.appendChild(figure);
 	});
 }
+
 // ------Clic sur "Ajouter une photo" : bascule de la galerie vers le formulaire-----*/
 
 // Sélection des éléments du DOM 
@@ -110,4 +112,42 @@ btnBack.addEventListener("click", () => {
 	modalTitle.textContent = "Galerie photo"; 
 });
 
+// ------Clic sur "btn-delete" : supprime un projet ----------*/
+import { deleteProjectAPI } from "./api.js";
+
+// Ajout des écouteurs pour supprimer
+function addDeleteListeners() {
+    const btnsDelete = document.querySelectorAll(".btn-delete"); // Tous les boutons
+
+    btnsDelete.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const figure = btn.closest("figure");     // Récupère la figure correspondante
+            const id = figure.dataset.id;             // Récupère l'id du projet
+            const token = localStorage.getItem("token");          // Remplace par ton token réel
+            deleteProject(id, figure, token);         // Supprime le projet
+        });
+    });
+}
+
+// Suppression projet API + DOM
+async function deleteProject(id, figure, token) {
+    try {
+        const ok = await deleteProjectAPI(id, token);  // Appel API DELETE
+
+        if (ok) {
+            figure.remove();  // Supprime l'élément du DOM si réussi
+
+			// Supprime aussi dans la galerie principale
+            const mainFigure = document.querySelector(`.gallery figure[data-id="${id}"]`);
+            if(mainFigure) mainFigure.remove();
+
+        } else {
+            alert("La suppression a échoué côté serveur.");
+        }
+
+    } catch (error) {
+        console.error("Erreur réseau :", error);
+        alert("Impossible de contacter le serveur.");
+    }
+}
 
