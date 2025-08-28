@@ -5,7 +5,9 @@ function affichageWorks(works) {
     gallery.replaceChildren();                                      //  Je vide la galerie en supprimant tous les enfants
 
     works.forEach((work) => {                                       //  Je fais une boucle sur le tableau works pour récupérer chaque travaux 1 par 1
-    const figure = document.createElement("figure");                //  je crée un élément "figure"
+    const figure = document.createElement("figure");               //  je crée un élément "figure"
+    figure.dataset.id = work.id;
+
     const img = document.createElement("img");                      //  je crée un élément "img"
     img.src = work.imageUrl;                                        //  je définit l'URL de l'image
     img.alt = work.title;                                           //  je définit le texte alternatif de l'image
