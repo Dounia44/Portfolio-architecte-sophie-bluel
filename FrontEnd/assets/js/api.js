@@ -7,3 +7,11 @@ export async function getCategories () {
     const response = await fetch("http://localhost:5678/api/categories");
     return response.json();
 }
+
+export async function deleteProjectAPI(id, token) {
+    const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.ok;
+}
