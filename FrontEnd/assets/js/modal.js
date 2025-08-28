@@ -57,6 +57,7 @@ function afficherPhotos(photos) {
 		photos.forEach(photo => {
 			// Création du conteneur figure
 			const figure = document.createElement("figure");
+			figure.dataset.id = photo.id;
 
 			// Création et configuration de l'image
 			const img = document.createElement("img");
