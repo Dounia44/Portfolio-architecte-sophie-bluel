@@ -13,6 +13,12 @@ btnEdition.addEventListener("click", async () => {
 	modal.classList.remove("hidden");                   // Affiche la modale (en retirant "hidden")
 	modal.classList.add("active");                      // Ajoute la classe active pour afficher
 	modal.setAttribute("aria-hidden", "false");        	// Accessibilité : indique que la modale est visible
+
+	// vider la preview de upload et la cacher
+	imagePreview.src = "";
+	imagePreview.classList.add("hidden");
+	uploadInfo.classList.remove("hidden");
+
 	 try {
 		// Récupère les images depuis l’API
         const works = await getWorks(); 	
@@ -29,6 +35,7 @@ btnEdition.addEventListener("click", async () => {
 // -------------------- Fermeture avec la croix --------------------
 
 btnClose.addEventListener("click", () => {
+	btnEdition.focus();
 	modal.classList.add("hidden");               	// Cache la modale
 	modal.classList.remove("active");             	// Supprime la classe "active"
 	modal.setAttribute("aria-hidden", "true");		// Accessibilité : indique que la modale est cachée
@@ -38,6 +45,7 @@ btnClose.addEventListener("click", () => {
 // -------------------- Fermeture au clic sur le backdrop --------------------
 modal.addEventListener("click", (e) => {
 	if (e.target === modal) {           		// Vérifie si le clic est sur l’arrière-plan (et pas à l’intérieur)
+		btnEdition.focus();
 		modal.classList.add("hidden");
 		modal.classList.remove("active");
 		modal.setAttribute("aria-hidden", "true");
@@ -151,3 +159,40 @@ async function deleteProject(id, figure, token) {
     }
 }
 
+// sélectionner les éléments dont on aura besoin
+const uploadForm = document.querySelector(".upload-form");	// le formulaire complet
+const fileInput = document.querySelector("#image");			// l’input file
+const titleInput = document.querySelector("#title");		// champ titre
+const categorySelect = document.querySelector("#category");		 // select catégorie
+const imagePreview = document.querySelector(".image-preview");
+const uploadInfo = document.querySelector(".upload-info");
+
+// On insère la zone d'aperçu juste après l'input file
+//fileInput.insertAdjacentElement("afterend", previewBox);
+
+//const submitBtn = uploadForm.querySelector("button[type='submit']");
+
+fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur sélectionne un fichier
+	 // 2️ Récupère le premier fichier choisi (s'il y en a)
+	const file = fileInput.files[0];	 
+	 // 3️ Si aucun fichier n'est sélectionné, on quitte
+    if (!file) {
+        // Cas où l'utilisateur annule la sélection
+        imagePreview.src = "";                     // vide l'image preview
+        imagePreview.classList.add("hidden");      // cache l'image
+        uploadInfo.classList.remove("hidden");     // réaffiche le texte d'instruction
+        return;                                    // on quitte le listener
+    };
+
+    // 4️ Crée une URL temporaire pour afficher l'image dans le navigateur
+    const imageURL = URL.createObjectURL(file);
+
+    // 5️ Remplace la source de l'image preview par ce fichier
+    imagePreview.src = imageURL;
+
+    // 6️ Affiche l'image preview si elle était cachée (par exemple via la classe "hidden")
+    imagePreview.classList.remove("hidden");
+
+    // 7️ Optionnel : cache le texte/icone d'instructions
+	uploadInfo.classList.add("hidden");
+});
