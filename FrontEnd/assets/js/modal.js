@@ -8,16 +8,23 @@ const modal = document.getElementById("modal");
 const modalGallery = document.querySelector(".modal-gallery");
 const btnClose = document.querySelector(".modal-close");
 
+
+/* -------- Fonction utilitaire pour réinitialiser la preview -------- */
+function resetPreview() {
+	imagePreview.src = ""; 						// vide la preview
+	imagePreview.classList.add("hidden"); 		// cache l'image
+	uploadInfo.classList.remove("hidden"); 		// réaffiche le texte
+	fileInput.value = ""; 						// reset aussi l’input file
+}
+
 // -------------------- Ouverture de la modale --------------------
 btnEdition.addEventListener("click", async () => {
 	modal.classList.remove("hidden");                   // Affiche la modale (en retirant "hidden")
 	modal.classList.add("active");                      // Ajoute la classe active pour afficher
 	modal.setAttribute("aria-hidden", "false");        	// Accessibilité : indique que la modale est visible
 
-	// vider la preview de upload et la cacher
-	imagePreview.src = "";
-	imagePreview.classList.add("hidden");
-	uploadInfo.classList.remove("hidden");
+		// Réinitialiser la preview quand on ouvre la modale
+	resetPreview();
 
 	 try {
 		// Récupère les images depuis l’API
@@ -167,10 +174,6 @@ const categorySelect = document.querySelector("#category");		 // select catégor
 const imagePreview = document.querySelector(".image-preview");
 const uploadInfo = document.querySelector(".upload-info");
 
-// On insère la zone d'aperçu juste après l'input file
-//fileInput.insertAdjacentElement("afterend", previewBox);
-
-//const submitBtn = uploadForm.querySelector("button[type='submit']");
 
 fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur sélectionne un fichier
 	 // 2️ Récupère le premier fichier choisi (s'il y en a)
@@ -178,9 +181,7 @@ fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur s
 	 // 3️ Si aucun fichier n'est sélectionné, on quitte
     if (!file) {
         // Cas où l'utilisateur annule la sélection
-        imagePreview.src = "";                     // vide l'image preview
-        imagePreview.classList.add("hidden");      // cache l'image
-        uploadInfo.classList.remove("hidden");     // réaffiche le texte d'instruction
+		resetPreview();
         return;                                    // on quitte le listener
     };
 
