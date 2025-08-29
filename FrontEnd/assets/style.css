@@ -334,6 +334,7 @@ footer nav ul {
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	column-gap: 10px;
 	row-gap: 29px;
+	margin-bottom: 63px;
 }	
 
 .modal-gallery .photo-modal-gallery {
@@ -444,16 +445,27 @@ footer nav ul {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-.upload-zone{
+.upload-zone {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 169px;
+	background-color: #E8F1F6;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.upload-info {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	gap: 8px;
-	height: 169px;
-	background-color: #E8F1F6;
-	border-radius: 3px;
-	cursor: pointer;
+}
+
+.image-preview {
+	height: 100%;
 }
 
 .upload-btn {
