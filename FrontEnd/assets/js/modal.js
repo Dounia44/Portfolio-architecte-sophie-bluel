@@ -114,7 +114,43 @@ btnAdd.addEventListener("click", () => {
 	btnBack.classList.remove("hidden");					// Rend le bouton Retour visible
 
 	modalTitle.textContent = "Ajout photo"; // CHANGE le titre pour le formulaire
+
+	populateCategories();
 });
+
+ // Fonction pour remplir les catégories
+import { getCategories } from "./api.js";
+
+async function populateCategories() {
+    const select = document.getElementById("category");
+
+    // 1 On vide les anciennes options
+    select.replaceChildren();
+
+    // 2 On recrée l’option par défaut
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "";
+    defaultOption.hidden = true;
+
+    select.appendChild(defaultOption);
+
+    try {
+        // 3️ On récupère les catégories depuis l’API
+        const categories = await getCategories();
+
+        // 4️ On crée une option par catégorie
+        categories.forEach(cat => {
+            const option = document.createElement("option");
+            option.value = cat.id;         // ID utilisé par l’API
+            option.textContent = cat.name; // Nom affiché
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Erreur lors du chargement des catégories :", error);
+    }
+}
+	
 
 // ------Clic sur "Retour" : bascule du formulaire vers la galerie----------*/
 
