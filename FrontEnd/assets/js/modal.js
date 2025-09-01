@@ -1,15 +1,33 @@
 /* ---------------------------------------------------------
-   Gestion de la fenêtre modale (ouverture, fermeture, contenu)
+   Imports
 --------------------------------------------------------- */
+import { getWorks, getCategories, deleteProjectAPI, addProjectAPI } from "./api.js";
 
-// Sélection des éléments du DOM
+/* ---------------------------------------------------------
+   Sélecteurs DOM globaux
+--------------------------------------------------------- */
+// Modale et boutons
 const btnEdition = document.getElementById("btn-edition");
 const modal = document.getElementById("modal");
 const modalGallery = document.querySelector(".modal-gallery");
 const btnClose = document.querySelector(".modal-close");
+const btnAdd = document.querySelector(".btn.add-photo");
+const modalGalleryView = document.querySelector(".modal-gallery-view");
+const modalForm  = document.querySelector(".modal-form");
+const btnBack = document.querySelector(".modal-back");
+const modalTitle = document.getElementById("titlemodal")
 
+// Formulaire d'ajout
+const form = document.querySelector(".upload-form");	// le formulaire complet
+const fileInput = document.querySelector("#image");			// l’input file
+const titleInput = document.querySelector("#title");		// champ titre
+const categorySelect = document.querySelector("#category");		 // select catégorie
+const imagePreview = document.querySelector(".image-preview");
+const uploadInfo = document.querySelector(".upload-info");
 
-/* -------- Fonction utilitaire pour réinitialiser la preview -------- */
+/* ---------------------------------------------------------
+   Fonction utilitaire pour réinitialiser la preview
+--------------------------------------------------------- */
 function resetPreview() {
 	imagePreview.src = ""; 						// vide la preview
 	imagePreview.classList.add("hidden"); 		// cache l'image
@@ -17,7 +35,9 @@ function resetPreview() {
 	fileInput.value = ""; 						// reset aussi l’input file
 }
 
-// -------------------- Ouverture de la modale --------------------
+/* ---------------------------------------------------------
+   Gestion ouverture/fermeture modale
+--------------------------------------------------------- */
 btnEdition.addEventListener("click", async () => {
 	modal.classList.remove("hidden");                   // Affiche la modale (en retirant "hidden")
 	modal.classList.add("active");                      // Ajoute la classe active pour afficher
@@ -29,11 +49,9 @@ btnEdition.addEventListener("click", async () => {
 	 try {
 		// Récupère les images depuis l’API
         const works = await getWorks(); 	
-
 		// Affiche les images dans la galerie de la modale
         afficherPhotos(works);
 		addDeleteListeners();
-
     } catch (error) {
         console.error("Erreur lors du chargement des photos :", error);
     }
@@ -62,11 +80,7 @@ modal.addEventListener("click", (e) => {
 
 /* ---------------------------------------------------------
    Gestion de l'affichage des photos dans la galerie
---------------------------------------------------------- */
-
-// Import de la fonction API (récupération des œuvres depuis le serveur)
-import {getWorks } from "./api.js";		
-
+--------------------------------------------------------- */	
 function afficherPhotos(photos) {
 	modalGallery.replaceChildren();		// vide la galerie avant de remplir
 
@@ -85,6 +99,7 @@ function afficherPhotos(photos) {
 			const btnDelete = document.createElement("button");
 			btnDelete.classList.add("btn-delete");
 			btnDelete.setAttribute("aria-label", "Supprimer la photo");
+
 			// Icône trash dans le bouton
 			const icone = document.createElement("img");
 			icone.src = "./assets/icons/trash.svg";  
@@ -98,42 +113,38 @@ function afficherPhotos(photos) {
 	});
 }
 
-// ------Clic sur "Ajouter une photo" : bascule de la galerie vers le formulaire-----*/
-
-// Sélection des éléments du DOM 
-const btnAdd = document.querySelector(".btn.add-photo");
-const modalGalleryView = document.querySelector(".modal-gallery-view");
-const modalForm  = document.querySelector(".modal-form");
-const btnBack = document.querySelector(".modal-back");
-const modalTitle = document.getElementById("titlemodal")
-
-// Gestion du clic sur le bouton "Ajouter une photo"
+/* ---------------------------------------------------------
+   Gestion formulaire "Ajouter une photo"
+--------------------------------------------------------- */
 btnAdd.addEventListener("click", () => {
 	modalGalleryView.classList.add("hidden");           // cache la galerie
 	modalForm.classList.remove("hidden");              // affiche le formulaire
 	btnBack.classList.remove("hidden");					// Rend le bouton Retour visible
-
 	modalTitle.textContent = "Ajout photo"; // CHANGE le titre pour le formulaire
 
 	populateCategories();
 });
 
- // Fonction pour remplir les catégories
-import { getCategories } from "./api.js";
+btnBack.addEventListener("click", () => {
+	modalForm.classList.add("hidden");			  		//cacher le formulaire
+	modalGalleryView.classList.remove("hidden");		//afficher la galerie
+	btnBack.classList.add("hidden");					// Cache le bouton Retour
 
+	modalTitle.textContent = "Galerie photo"; 
+});
+
+/* ---------------------------------------------------------
+   Remplir dynamiquement les catégories
+--------------------------------------------------------- */
 async function populateCategories() {
-    const select = document.getElementById("category");
+    categorySelect.replaceChildren();
 
-    // 1 On vide les anciennes options
-    select.replaceChildren();
-
-    // 2 On recrée l’option par défaut
+    //On recrée l’option par défaut
     const defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.textContent = "";
     defaultOption.hidden = true;
-
-    select.appendChild(defaultOption);
+    categorySelect.appendChild(defaultOption);
 
     try {
         // 3️ On récupère les catégories depuis l’API
@@ -144,29 +155,16 @@ async function populateCategories() {
             const option = document.createElement("option");
             option.value = cat.id;         // ID utilisé par l’API
             option.textContent = cat.name; // Nom affiché
-            select.appendChild(option);
+            categorySelect.appendChild(option);
         });
     } catch (error) {
         console.error("Erreur lors du chargement des catégories :", error);
     }
 }
 	
-
-// ------Clic sur "Retour" : bascule du formulaire vers la galerie----------*/
-
-// Écoute du clic sur le bouton Retour
-btnBack.addEventListener("click", () => {
-	modalForm.classList.add("hidden");			  		//cacher le formulaire
-	modalGalleryView.classList.remove("hidden");		//afficher la galerie
-	btnBack.classList.add("hidden");					// Cache le bouton Retour
-
-	modalTitle.textContent = "Galerie photo"; 
-});
-
-// ------Clic sur "btn-delete" : supprime un projet ----------*/
-import { deleteProjectAPI } from "./api.js";
-
-// Ajout des écouteurs pour supprimer
+/* ---------------------------------------------------------
+   Gestion suppression projet
+--------------------------------------------------------- */
 function addDeleteListeners() {
     const btnsDelete = document.querySelectorAll(".btn-delete"); // Tous les boutons
 
@@ -186,9 +184,10 @@ async function deleteProject(id, figure, token) {
         const ok = await deleteProjectAPI(id, token);  // Appel API DELETE
 
         if (ok) {
-            figure.remove();  // Supprime l'élément du DOM si réussi
+            // Supprime l'élément de la galerie modale si réussi
+            figure.remove();
 
-			// Supprime aussi dans la galerie principale
+			// Et supprime aussi dans la galerie principale
             const mainFigure = document.querySelector(`.gallery figure[data-id="${id}"]`);
             if(mainFigure) mainFigure.remove();
 
@@ -201,25 +200,17 @@ async function deleteProject(id, figure, token) {
         alert("Impossible de contacter le serveur.");
     }
 }
-
-// sélectionner les éléments dont on aura besoin
-const uploadForm = document.querySelector(".upload-form");	// le formulaire complet
-const fileInput = document.querySelector("#image");			// l’input file
-const titleInput = document.querySelector("#title");		// champ titre
-const categorySelect = document.querySelector("#category");		 // select catégorie
-const imagePreview = document.querySelector(".image-preview");
-const uploadInfo = document.querySelector(".upload-info");
-
+/* ---------------------------------------------------------
+   Prévisualisation image
+--------------------------------------------------------- */
 
 fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur sélectionne un fichier
 	 // 2️ Récupère le premier fichier choisi (s'il y en a)
 	const file = fileInput.files[0];	 
 	 // 3️ Si aucun fichier n'est sélectionné, on quitte
-    if (!file) {
-        // Cas où l'utilisateur annule la sélection
-		resetPreview();
-        return;                                    // on quitte le listener
-    };
+    if (!file)  return resetPreview();
+        // dans le cas où l'utilisateur annule la sélection
+        // on quitte le listener
 
     // 4️ Crée une URL temporaire pour afficher l'image dans le navigateur
     const imageURL = URL.createObjectURL(file);
