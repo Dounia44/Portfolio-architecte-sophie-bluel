@@ -1,3 +1,5 @@
+// api.js
+
 // Appels au serveur (fetch, gestion des erreurs, ..)
 export async function getWorks () {
     const response = await fetch("http://localhost:5678/api/works");
@@ -14,4 +16,13 @@ export async function deleteProjectAPI(id, token) {
         headers: { Authorization: `Bearer ${token}` }
     });
     return response.ok;
+}
+
+export async function addProjectAPI(data, token) {
+    const response = await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: data // FormData, pas besoin de préciser Content-Type
+    });
+    return await response.json(); // renvoie le projet ajouté
 }

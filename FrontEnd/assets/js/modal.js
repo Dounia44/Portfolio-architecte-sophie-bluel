@@ -1,3 +1,4 @@
+// modal.js
 /* ---------------------------------------------------------
    Imports
 --------------------------------------------------------- */
@@ -224,3 +225,73 @@ fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur s
     // 7️ Optionnel : cache le texte/icone d'instructions
 	uploadInfo.classList.add("hidden");
 });
+
+
+/* ---------------------------------------------------------
+   Ajout projet
+--------------------------------------------------------- */
+// Fonction qui écoute le submit
+export function addAddProjectListeners() {
+    const formAdd = document.getElementById("form-add");
+    if (!formAdd) return;
+
+    formAdd.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const data = new FormData(formAdd);
+        const token = localStorage.getItem("token");
+        if (!token) {
+            console.error("Utilisateur non connecté !");
+            return;
+        }
+
+        await addProjectToGalleries(data, token);
+
+        formAdd.reset(); // optionnel : vider le formulaire après ajout
+        
+    });
+}
+
+//Fonction qui ajoute le projet dans les deux galeries
+async function addProjectToGalleries(data, token) {
+    const newProject = await addProjectAPI(data, token);
+    if (!newProject) {
+        console.error("Erreur lors de l'ajout du projet");
+        return;
+    }
+
+    // Galerie principale
+    const gallery = document.querySelector(".gallery");
+    const figureMain = document.createElement("figure");
+    const imgMain = document.createElement("img");
+
+    imgMain.src = newProject.imageUrl;
+    imgMain.alt = newProject.title;
+
+    const captionMain = document.createElement("figcaption");
+    captionMain.textContent = newProject.title;
+
+    figureMain.appendChild(imgMain);
+    figureMain.appendChild(captionMain);
+    gallery.appendChild(figureMain);
+
+    // Galerie modale
+    const figureModal = document.createElement("figure");
+    figureModal.dataset.id = newProject.id; // utile pour la suppression
+
+    const imgModal = document.createElement("img");
+    imgModal.src = newProject.imageUrl;
+    imgModal.alt = newProject.title;
+
+    const captionModal = document.createElement("figcaption");
+    captionModal.textContent = newProject.title;
+
+    figureModal.appendChild(imgModal);
+    figureModal.appendChild(captionModal);
+    modalGallery.appendChild(figureModal);
+}
+
+/* ---------------------------------------------------------
+   Initialisation
+--------------------------------------------------------- */
+addAddProjectListeners();
