@@ -26,6 +26,22 @@ const categorySelect = document.querySelector("#category");		 // select catégor
 const imagePreview = document.querySelector(".image-preview");
 const uploadInfo = document.querySelector(".upload-info");
 
+
+
+// Vérifie si tous les champs sont remplis pour activer le bouton
+function checkFormValidity() {
+    const fileSelected = fileInput.files.length > 0;
+    const titleFilled = titleInput.value.trim() !== "";
+    const categorySelected = categorySelect.value !== "";
+
+    // Active/désactive le bouton
+    submitButton.disabled = !(fileSelected && titleFilled && categorySelected);
+}
+
+// Bouton Valider
+const submitButton = document.querySelector(".btn.upload"); // le bouton "Valider"
+submitButton.disabled = true; // désactivé par défaut
+
 /* ---------------------------------------------------------
    Fonction utilitaire pour réinitialiser la preview
 --------------------------------------------------------- */
@@ -148,19 +164,20 @@ async function populateCategories() {
     categorySelect.appendChild(defaultOption);
 
     try {
-        // 3️ On récupère les catégories depuis l’API
+        //On récupère les catégories depuis l’API
         const categories = await getCategories();
 
-        // 4️ On crée une option par catégorie
+        //On crée une option par catégorie
         categories.forEach(cat => {
             const option = document.createElement("option");
-            option.value = cat.id;         // ID utilisé par l’API
-            option.textContent = cat.name; // Nom affiché
+            option.value = cat.id;         
+            option.textContent = cat.name;
             categorySelect.appendChild(option);
         });
     } catch (error) {
         console.error("Erreur lors du chargement des catégories :", error);
     }
+    checkFormValidity();                // vérifie le validité du formulaire après remplissage
 }
 	
 /* ---------------------------------------------------------
@@ -171,10 +188,10 @@ function addDeleteListeners() {
 
     btnsDelete.forEach(btn => {
         btn.addEventListener("click", () => {
-            const figure = btn.closest("figure");     // Récupère la figure correspondante
-            const id = figure.dataset.id;             // Récupère l'id du projet
-            const token = localStorage.getItem("token");          // Remplace par ton token réel
-            deleteProject(id, figure, token);         // Supprime le projet
+            const figure = btn.closest("figure");                   // Récupère la figure correspondante
+            const id = figure.dataset.id;                           // Récupère l'id du projet
+            const token = localStorage.getItem("token");             // Remplace par ton token réel
+            deleteProject(id, figure, token);                       // Supprime le projet
         });
     });
 }
@@ -224,8 +241,13 @@ fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur s
 
     // 7️ Optionnel : cache le texte/icone d'instructions
 	uploadInfo.classList.add("hidden");
+
+    checkFormValidity(); // <-- vérifie validité à chaque changement
 });
 
+// Vérifier validité aussi quand on tape le titre ou change catégorie
+titleInput.addEventListener("input", checkFormValidity);
+categorySelect.addEventListener("change", checkFormValidity);
 
 /* ---------------------------------------------------------
    Ajout projet
@@ -247,8 +269,8 @@ export function addAddProjectListeners() {
 
         await addProjectToGalleries(data, token);
 
-        formAdd.reset(); // optionnel : vider le formulaire après ajout
-        
+        formAdd.reset(); 
+        resetPreview();         // reset le bouton Valider après soumission
     });
 }
 
@@ -277,18 +299,28 @@ async function addProjectToGalleries(data, token) {
 
     // Galerie modale
     const figureModal = document.createElement("figure");
-    figureModal.dataset.id = newProject.id; // utile pour la suppression
-
+    figureModal.dataset.id = newProject.id; 
     const imgModal = document.createElement("img");
     imgModal.src = newProject.imageUrl;
     imgModal.alt = newProject.title;
+    imgModal.classList.add("photo-modal-gallery")
 
-    const captionModal = document.createElement("figcaption");
-    captionModal.textContent = newProject.title;
+    // Création du bouton "Supprimer"
+    const btnDelete = document.createElement("button");
+    btnDelete.classList.add("btn-delete");
+    btnDelete.setAttribute("aria-label", "Supprimer la photo");
 
+    // Icône trash dans le bouton
+    const icone = document.createElement("img");
+    icone.src = "./assets/icons/trash.svg";  
+    icone.alt = "Supprimer";
+
+    btnDelete.appendChild(icone);
     figureModal.appendChild(imgModal);
-    figureModal.appendChild(captionModal);
+    figureModal.appendChild(btnDelete);
     modalGallery.appendChild(figureModal);
+
+    checkFormValidity();                
 }
 
 /* ---------------------------------------------------------
