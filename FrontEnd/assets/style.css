@@ -23,14 +23,17 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+
 body {
 	line-height: 1;
 }
+
 ol, ul {
 	list-style: none;
 }
@@ -38,6 +41,7 @@ ol, ul {
 blockquote, q {
 	quotes: none;
 }
+
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
@@ -51,6 +55,7 @@ table {
 html, body {
 	height: 100%; 
 }
+
 body {
 	display: flex;
 	flex-direction: column;
@@ -60,14 +65,17 @@ body {
 	font-size: 14px;
 	background-color:#FFFEF8;;
 }
+
 main {
 	flex: 1; 
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
 	margin: 50px 0;
 }
+
 section {
 	margin: 50px 0;
 }
@@ -285,6 +293,7 @@ footer nav ul {
 	font-weight: 400;
 	gap: 12px;
 }
+
 /*Modal*/
 .modal {
 	display: flex;
@@ -309,7 +318,6 @@ footer nav ul {
 	border-radius: 10px;
 	box-sizing: border-box;
 	padding: 62px 105px 17px 105px;
-
 }
 
 .modal-close {
@@ -486,4 +494,10 @@ footer nav ul {
 
 .upload-icon {
 	margin-bottom: 4px;
+}
+
+/* Bouton "Valider" du formulaire upload */
+.upload-form .btn.upload:disabled {
+  background-color: #A7A7A7; 
+  color: #FFFFFF;
 }
