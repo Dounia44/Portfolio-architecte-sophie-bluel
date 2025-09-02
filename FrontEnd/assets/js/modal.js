@@ -320,6 +320,12 @@ async function addProjectToGalleries(data, token) {
     figureModal.appendChild(btnDelete);
     modalGallery.appendChild(figureModal);
 
+    //Revenir à la galerie
+    modal.classList.add("hidden");                  // cacher la modale
+    modal.classList.remove("active");                
+    modal.setAttribute("aria-hidden", "true"); 
+    btnEdition.focus();                        // remettre le focus sur le bouton 
+
     checkFormValidity();                
 }
 
