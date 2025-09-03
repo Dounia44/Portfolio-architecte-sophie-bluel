@@ -92,15 +92,16 @@
 	<!-- Vue 2 : Formulaire-->
 		<div class="modal-form hidden">
 			<form id="form-add" class="upload-form">
-				<label for="image" class="upload-zone">
+				<label for="image" class="upload-zone" tabindex="0">
 					<span class="upload-info">
 						<img src="./assets/icons/picture.svg" alt="" class="upload-icon">
 						<span class="upload-btn">+ Ajouter photo</span>
-						<span class="upload-info">jpg, png : 4mo max</span>
+						<span class="upload-info-text">jpg, png : 4mo max</span>
 					</span>
 					<img src="" alt="Aperçu de l'image" class="image-preview hidden">
 				</label>
-				<input type="file" id="image" name="image" accept="image/jpeg, image/png" hidden>
+				<input type="file" id="image" name="image" accept="image/jpeg, image/png" class="visually-hidden">
+				<p class="error file-error-msg hidden"></p>
 				<label for="title">Titre</label>
 				<input type="text" id="title" name="title" required>
 				<label for="category">Catégorie</label>
