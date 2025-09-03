@@ -25,6 +25,7 @@ const titleInput = document.querySelector("#title");		// champ titre
 const categorySelect = document.querySelector("#category");		 // select catégorie
 const imagePreview = document.querySelector(".image-preview");
 const uploadInfo = document.querySelector(".upload-info");
+const fileErrorMsg = document.querySelector(".file-error-msg");
 
 // Bouton Valider
 const submitButton = document.querySelector(".btn.upload"); // le bouton "Valider"
@@ -71,12 +72,31 @@ function closeModalWithReset() {
    Vérifie si tous les champs sont remplis pour activer le bouton
 --------------------------------------------------------- */
 function checkFormValidity() {
-    const fileSelected = fileInput.files.length > 0;
+    const file = fileInput.files[0];
+    let fileValid = false;
+
+    if (file) {
+        const allowedTypes = ["image/jpeg", "image/png"];
+        const maxSize = 4 * 1024 * 1024; // 4 Mo
+
+        if (!allowedTypes.includes(file.type)) {
+            fileErrorMsg.textContent = "Le fichier doit être au format JPEG ou PNG.";
+            fileErrorMsg.classList.remove("hidden");
+        } else if (file.size > maxSize) {
+            fileErrorMsg.textContent = "Le fichier ne doit pas dépasser 4 Mo.";
+            fileErrorMsg.classList.remove("hidden");
+        } else {
+            fileErrorMsg.textContent = "";
+            fileErrorMsg.classList.add("hidden");
+            fileValid = true;
+        }
+    }
+
     const titleFilled = titleInput.value.trim() !== "";
     const categorySelected = categorySelect.value !== "";
 
-    // Active/désactive le bouton
-    submitButton.disabled = !(fileSelected && titleFilled && categorySelected);
+    // Active/désactive le bouton Valider
+    submitButton.disabled = !(fileValid && titleFilled && categorySelected);
 }
 
 /* ---------------------------------------------------------
@@ -244,6 +264,7 @@ fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur s
 	 // 3️ Si aucun fichier n'est sélectionné, on quitte
     if (!file) {
         resetPreview();
+        fileErrorMsg.classList.add("hidden");
         return;
         }
         // dans le cas où l'utilisateur annule la sélection
