@@ -107,8 +107,25 @@ a {
 	text-decoration: none;
 }
 
+.error {
+	color: #d9534f; 
+	font-size: 1em;
+	font-weight: 700;
+}
+
 .hidden {
 	display: none !important;
+}
+
+.visually-hidden { 
+	position: absolute !important; 
+	width: 1px; 
+	height: 1px; 
+	padding: 0; 
+	margin: -1px; 
+	overflow: hidden; 
+	clip: rect(0,0,0,0); 
+	border: 0; 
 }
 
 nav ul {
@@ -274,9 +291,7 @@ footer nav ul {
 }
 
 #login .error {  
-	font-weight: bold;
 	font-family: Work Sans;
-	font-size: 1em;  
 	padding: 8px;
 }
 
@@ -464,6 +479,11 @@ footer nav ul {
 	cursor: pointer;
 }
 
+.upload-zone:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
 .upload-info {
 	display: flex;
 	flex-direction: column;
@@ -476,6 +496,10 @@ footer nav ul {
 	height: 100%;
 }
 
+.file-error-msg {
+	text-align: center;
+}
+
 .upload-btn {
 	display: flex;
 	justify-content: center;
@@ -485,6 +509,7 @@ footer nav ul {
 	color: #306685;
 	background-color: #CBD6DC;
 	padding: 0 33px;
+	font-size: 14px;
 }
 
 .upload-info{
