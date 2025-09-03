@@ -26,21 +26,9 @@ const categorySelect = document.querySelector("#category");		 // select catégor
 const imagePreview = document.querySelector(".image-preview");
 const uploadInfo = document.querySelector(".upload-info");
 
-
-
-// Vérifie si tous les champs sont remplis pour activer le bouton
-function checkFormValidity() {
-    const fileSelected = fileInput.files.length > 0;
-    const titleFilled = titleInput.value.trim() !== "";
-    const categorySelected = categorySelect.value !== "";
-
-    // Active/désactive le bouton
-    submitButton.disabled = !(fileSelected && titleFilled && categorySelected);
-}
-
 // Bouton Valider
 const submitButton = document.querySelector(".btn.upload"); // le bouton "Valider"
-submitButton.disabled = true; // désactivé par défaut
+submitButton.disabled = true;               // désactivé par défaut
 
 /* ---------------------------------------------------------
    Fonction utilitaire pour réinitialiser la preview
@@ -53,6 +41,45 @@ function resetPreview() {
 }
 
 /* ---------------------------------------------------------
+   Fonction utilitaire pour fermer la modale
+--------------------------------------------------------- */
+function closeModal() {
+    modal.classList.add("hidden");
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    btnEdition.focus();
+}
+
+/* ---------------------------------------------------------
+   Fonction utilitaire pour fermer la modale et tout reset
+--------------------------------------------------------- */
+function closeModalWithReset() {
+    // Ferme la modale
+    modal.classList.add("hidden");
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    btnEdition.focus();
+
+    // Réinitialise le formulaire
+    resetPreview();             // vide l'image preview
+    titleInput.value = "";      // reset titre
+    categorySelect.value = "";  // reset catégorie
+    checkFormValidity();        // update le bouton Valider
+}
+
+/* ---------------------------------------------------------
+   Vérifie si tous les champs sont remplis pour activer le bouton
+--------------------------------------------------------- */
+function checkFormValidity() {
+    const fileSelected = fileInput.files.length > 0;
+    const titleFilled = titleInput.value.trim() !== "";
+    const categorySelected = categorySelect.value !== "";
+
+    // Active/désactive le bouton
+    submitButton.disabled = !(fileSelected && titleFilled && categorySelected);
+}
+
+/* ---------------------------------------------------------
    Gestion ouverture/fermeture modale
 --------------------------------------------------------- */
 btnEdition.addEventListener("click", async () => {
@@ -61,7 +88,7 @@ btnEdition.addEventListener("click", async () => {
 	modal.setAttribute("aria-hidden", "false");        	// Accessibilité : indique que la modale est visible
 
 		// Réinitialiser la preview quand on ouvre la modale
-	resetPreview();
+	//resetPreview();
 
 	 try {
 		// Récupère les images depuis l’API
@@ -76,24 +103,12 @@ btnEdition.addEventListener("click", async () => {
 
 // -------------------- Fermeture avec la croix --------------------
 
-btnClose.addEventListener("click", () => {
-	btnEdition.focus();
-	modal.classList.add("hidden");               	// Cache la modale
-	modal.classList.remove("active");             	// Supprime la classe "active"
-	modal.setAttribute("aria-hidden", "true");		// Accessibilité : indique que la modale est cachée
-});
-
+btnClose.addEventListener("click", closeModalWithReset);
 
 // -------------------- Fermeture au clic sur le backdrop --------------------
 modal.addEventListener("click", (e) => {
-	if (e.target === modal) {           		// Vérifie si le clic est sur l’arrière-plan (et pas à l’intérieur)
-		btnEdition.focus();
-		modal.classList.add("hidden");
-		modal.classList.remove("active");
-		modal.setAttribute("aria-hidden", "true");
-	}
+	if (e.target === modal) closeModal();         		
 });
-
 
 /* ---------------------------------------------------------
    Gestion de l'affichage des photos dans la galerie
@@ -134,6 +149,7 @@ function afficherPhotos(photos) {
    Gestion formulaire "Ajouter une photo"
 --------------------------------------------------------- */
 btnAdd.addEventListener("click", () => {
+
 	modalGalleryView.classList.add("hidden");           // cache la galerie
 	modalForm.classList.remove("hidden");              // affiche le formulaire
 	btnBack.classList.remove("hidden");					// Rend le bouton Retour visible
@@ -226,7 +242,10 @@ fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur s
 	 // 2️ Récupère le premier fichier choisi (s'il y en a)
 	const file = fileInput.files[0];	 
 	 // 3️ Si aucun fichier n'est sélectionné, on quitte
-    if (!file)  return resetPreview();
+    if (!file) {
+        resetPreview();
+        return;
+        }
         // dans le cas où l'utilisateur annule la sélection
         // on quitte le listener
 
@@ -320,11 +339,9 @@ async function addProjectToGalleries(data, token) {
     figureModal.appendChild(btnDelete);
     modalGallery.appendChild(figureModal);
 
+    addDeleteListeners();
     //Revenir à la galerie
-    modal.classList.add("hidden");                  // cacher la modale
-    modal.classList.remove("active");                
-    modal.setAttribute("aria-hidden", "true"); 
-    btnEdition.focus();                        // remettre le focus sur le bouton 
+    closeModal();                      
 
     checkFormValidity();                
 }
