@@ -1,4 +1,3 @@
-// modal.js
 /* ---------------------------------------------------------
    Imports
 --------------------------------------------------------- */
@@ -19,7 +18,6 @@ const btnBack = document.querySelector(".modal-back");
 const modalTitle = document.getElementById("titlemodal")
 
 // Formulaire d'ajout
-const form = document.querySelector(".upload-form");	// le formulaire complet
 const fileInput = document.querySelector("#image");			// l’input file
 const titleInput = document.querySelector("#title");		// champ titre
 const categorySelect = document.querySelector("#category");		 // select catégorie
@@ -106,10 +104,6 @@ btnEdition.addEventListener("click", async () => {
 	modal.classList.remove("hidden");                   // Affiche la modale (en retirant "hidden")
 	modal.classList.add("active");                      // Ajoute la classe active pour afficher
 	modal.setAttribute("aria-hidden", "false");        	// Accessibilité : indique que la modale est visible
-
-		// Réinitialiser la preview quand on ouvre la modale
-	//resetPreview();
-
 	 try {
 		// Récupère les images depuis l’API
         const works = await getWorks(); 	
@@ -221,7 +215,6 @@ async function populateCategories() {
 --------------------------------------------------------- */
 function addDeleteListeners() {
     const btnsDelete = document.querySelectorAll(".btn-delete"); // Tous les boutons
-
     btnsDelete.forEach(btn => {
         btn.addEventListener("click", () => {
             const figure = btn.closest("figure");                   // Récupère la figure correspondante
@@ -257,7 +250,6 @@ async function deleteProject(id, figure, token) {
 /* ---------------------------------------------------------
    Prévisualisation image
 --------------------------------------------------------- */
-
 fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur sélectionne un fichier
 	 // 2️ Récupère le premier fichier choisi (s'il y en a)
 	const file = fileInput.files[0];	 
@@ -267,9 +259,6 @@ fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur s
         fileErrorMsg.classList.add("hidden");
         return;
         }
-        // dans le cas où l'utilisateur annule la sélection
-        // on quitte le listener
-
     // 4️ Crée une URL temporaire pour afficher l'image dans le navigateur
     const imageURL = URL.createObjectURL(file);
 
@@ -361,12 +350,9 @@ async function addProjectToGalleries(data, token) {
     modalGallery.appendChild(figureModal);
 
     addDeleteListeners();
-    //Revenir à la galerie
     closeModal();                      
-
     checkFormValidity();                
 }
-
 /* ---------------------------------------------------------
    Initialisation
 --------------------------------------------------------- */

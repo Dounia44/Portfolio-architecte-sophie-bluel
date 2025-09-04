@@ -36,7 +36,6 @@ form.addEventListener("submit", async (event) => {    //Écoute du submit
 
         // 4. Lire la réponse JSON de l'API 
         const data = await response.json();      // on attend la réponse convertie en JSON
-        console.log("réponse API :", data);
 
         // Stocker le token
         localStorage.setItem("token", data.token);

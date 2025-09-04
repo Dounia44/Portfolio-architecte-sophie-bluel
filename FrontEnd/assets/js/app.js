@@ -58,14 +58,11 @@ function affichageFilter(categories, works) {
             } )
     })
 }
-
 async function init() {
     const works = await getWorks();
     const categories = await getCategories();
 
     affichageFilter(categories, works);
     affichageWorks(works);
-    console.log(works, categories);
 }
-
 init();
