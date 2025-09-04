@@ -257,6 +257,7 @@ fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur s
     if (!file) {
         resetPreview();
         fileErrorMsg.classList.add("hidden");
+        checkFormValidity();
         return;
         }
     // 4️ Crée une URL temporaire pour afficher l'image dans le navigateur
