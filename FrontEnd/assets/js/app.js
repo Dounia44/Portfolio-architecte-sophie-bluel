@@ -59,10 +59,39 @@ function affichageFilter(categories, works) {
     })
 }
 async function init() {
-    const works = await getWorks();
-    const categories = await getCategories();
+    let works = [];
+    let categories = [];
 
-    affichageFilter(categories, works);
+    try {
+        // throw new Error("Test d'erreur");
+        works = await getWorks();
+    } catch (error) {
+        console.error("Erreur lors du chargement des projets :", error);
+        alert("Impossible de charger les projets. Vérifiez votre connexion.");
+    }
+
+    try {
+        // throw new Error("Test d'erreur");
+        categories = await getCategories();
+    } catch (error) {
+        console.error("Erreur lors du chargement des catégories :", error);
+
+        // Vérifie si on est en mode invité (pas de token)
+        const token = localStorage.getItem("token");
+        if (!token) {
+        alert("Impossible de charger les catégories. Vérifiez votre connexion.");
+        }
+    }
+    
+    // Si on a récupéré au moins les works, on peut afficher
+    if (works.length > 0) {
     affichageWorks(works);
 }
+
+    // Si on a aussi les catégories, on active les filtres
+    if (categories.length > 0 && works.length > 0) {
+        affichageFilter(categories, works);
+    }
+}
+
 init();

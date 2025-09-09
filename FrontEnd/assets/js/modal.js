@@ -106,12 +106,14 @@ btnEdition.addEventListener("click", async () => {
 	modal.setAttribute("aria-hidden", "false");        	// Accessibilité : indique que la modale est visible
 	 try {
 		// Récupère les images depuis l’API
+        // throw new Error("Test d'erreur");
         const works = await getWorks(); 	
 		// Affiche les images dans la galerie de la modale
         afficherPhotos(works);
 		addDeleteListeners();
     } catch (error) {
         console.error("Erreur lors du chargement des photos :", error);
+        alert("Impossible de charger les projets. Vérifiez votre connexion.");
     }
 });
 
@@ -194,6 +196,8 @@ async function populateCategories() {
     categorySelect.appendChild(defaultOption);
 
     try {
+        //throw new Error("Test d'erreur");
+
         //On récupère les catégories depuis l’API
         const categories = await getCategories();
 
@@ -206,6 +210,7 @@ async function populateCategories() {
         });
     } catch (error) {
         console.error("Erreur lors du chargement des catégories :", error);
+        alert("Impossible de charger les catégories. Vérifiez votre connexion.");
     }
     checkFormValidity();                // vérifie le validité du formulaire après remplissage
 }
@@ -228,6 +233,7 @@ function addDeleteListeners() {
 // Suppression projet API + DOM
 async function deleteProject(id, figure, token) {
     try {
+        // throw new Error("Test d'erreur");
         const ok = await deleteProjectAPI(id, token);  // Appel API DELETE
 
         if (ok) {
@@ -306,7 +312,16 @@ export function addAddProjectListeners() {
 
 //Fonction qui ajoute le projet dans les deux galeries
 async function addProjectToGalleries(data, token) {
-    const newProject = await addProjectAPI(data, token);
+   let newProject;
+    try {
+        // throw new Error("Test d'erreur");
+        newProject = await addProjectAPI(data, token);
+    } catch (error) {
+        console.error("Erreur lors de l'ajout du projet :", error);
+        alert("Impossible d'ajouter le projet. Vérifiez votre connexion.");
+        return;
+    }
+    
     if (!newProject) {
         console.error("Erreur lors de l'ajout du projet");
         return;
@@ -314,7 +329,10 @@ async function addProjectToGalleries(data, token) {
 
     // Galerie principale
     const gallery = document.querySelector(".gallery");
+
     const figureMain = document.createElement("figure");
+    figureMain.dataset.id = newProject.id;
+
     const imgMain = document.createElement("img");
 
     imgMain.src = newProject.imageUrl;
