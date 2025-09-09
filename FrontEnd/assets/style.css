@@ -498,6 +498,7 @@ footer nav ul {
 
 .image-preview {
 	height: 100%;
+	max-width: 400px;
 }
 
 .file-error-msg {
