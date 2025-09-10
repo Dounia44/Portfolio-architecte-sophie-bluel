@@ -1,21 +1,21 @@
 //Ecouter l'événement global submit du formulaire 
-const form = document.querySelector("form");    //Je selectionne le formulaire dans la page login.html
-const monEmail = document.getElementById("email");         //j'identifie les champs input
-const monPassword = document.getElementById("password");    //j'identifie les champs password
-const divError = document.querySelector(".error"); // Sélection une seule fois
+const form = document.querySelector("form");
+const monEmail = document.getElementById("email");
+const monPassword = document.getElementById("password");
+const divError = document.querySelector(".error");
 
-form.addEventListener("submit", async (event) => {    //Écoute du submit
-    event.preventDefault();                     //Bloque le chargement automatique 
-    divError.textContent = ""; // Reset du message d’erreur
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();            
+    divError.textContent = "";
 
 //on récupère ce que l'utilisateur a tapé
-    const emailValue = monEmail.value;      
+    const emailValue = monEmail.value;
     const passwordValue = monPassword.value;
 
     try {
         // 2.Envoyer la requête POST avec fetch() :
         const response = await fetch("http://localhost:5678/api/users/login", {
-            method: "POST",                          // méthode HTTP : POST
+            method: "POST", 
             headers: {
                 "content-type": "application/json"   // indique qu'on envoie du JSON
             },
@@ -31,11 +31,11 @@ form.addEventListener("submit", async (event) => {    //Écoute du submit
             } else {
                 divError.textContent = "Erreur lors de la connexion. Veuillez réessayer.";
             }
-            return; // stoppe ici, pas besoin de throw
+            return;
         }
 
         // 4. Lire la réponse JSON de l'API 
-        const data = await response.json();      // on attend la réponse convertie en JSON
+        const data = await response.json();
 
         // Stocker le token
         localStorage.setItem("token", data.token);

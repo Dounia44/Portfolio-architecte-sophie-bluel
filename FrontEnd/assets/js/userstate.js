@@ -18,8 +18,8 @@ if (token) {
     btnEdition.classList.remove("hidden");
 
     navLogout.addEventListener("click", (event) => {
-        event.preventDefault();                 // évite le comportement par défaut du lien
-        localStorage.removeItem("token");       // supprime le token
+        event.preventDefault();
+        localStorage.removeItem("token");
         navLogin.classList.remove("hidden");
         navLogout.classList.add("hidden");
         filters.classList.remove("hidden");

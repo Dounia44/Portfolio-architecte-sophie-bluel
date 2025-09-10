@@ -1,33 +1,35 @@
 import { getCategories, getWorks } from "./api.js";
 
+//Affichage des projets :
 function affichageWorks(works) {
     const gallery = document.querySelector(".gallery");
-    gallery.replaceChildren();                                      //  Je vide la galerie en supprimant tous les enfants
+    gallery.replaceChildren();                                     
 
-    works.forEach((work) => {                                       //  Je fais une boucle sur le tableau works pour récupérer chaque travaux 1 par 1
-    const figure = document.createElement("figure");               //  je crée un élément "figure"
+    works.forEach((work) => {                                       
+    const figure = document.createElement("figure");               
     figure.dataset.id = work.id;
 
-    const img = document.createElement("img");                      //  je crée un élément "img"
-    img.src = work.imageUrl;                                        //  je définit l'URL de l'image
-    img.alt = work.title;                                           //  je définit le texte alternatif de l'image
-    const caption = document.createElement("figcaption");           //  je crée un élément "figcaption" caption.textContent = work.title;
+    const img = document.createElement("img");                      
+    img.src = work.imageUrl;
+    img.alt = work.title;
+    const caption = document.createElement("figcaption");
     caption.textContent = work.title;
     
-    figure.appendChild(img);                                        // Ajoute (img) dans <figure>
-    figure.appendChild(caption);                                    // Ajoute (caption) dans <figure>                                
-    gallery.appendChild(figure);                                    // Ajoute le <figure> complet dans la galerie
+    figure.appendChild(img);
+    figure.appendChild(caption);
+    gallery.appendChild(figure);
     });
 }
 
+//Filtrage des projets :
 function affichageFilter(categories, works) {
     const filtresContainer = document.querySelector(".filters");
     
-    // Nettoyer le container (pour éviter d’avoir le bouton "Modèle" affiché en plus)
+    // Nettoyer le container des boutons précédemment créés restent affichés
     filtresContainer.replaceChildren();
 
     // Ajouter le bouton "Tous"
-    const btnTous = document.createElement("button");                 // Crée une **copie complète** (true = avec tous les enfants et attributs) du bouton modèle templateButton et la stocke dans la variable btnTous.
+    const btnTous = document.createElement("button");                 
     btnTous.textContent = "Tous";
     btnTous.classList.add("filter", "active");
     filtresContainer.appendChild(btnTous);
@@ -41,7 +43,7 @@ function affichageFilter(categories, works) {
     });
 
     // Écouteurs de clic sur tous les boutons
-    const buttons = filtresContainer.querySelectorAll("button");       // Sélectionne tous les boutons à l'intérieur du conteneur de filtres
+    const buttons = filtresContainer.querySelectorAll("button");       
     buttons.forEach((btn) => {
             btn.addEventListener("click", () => {
                 // Retirer la classe "active" de tous les boutons
@@ -85,8 +87,8 @@ async function init() {
     
     // Si on a récupéré au moins les works, on peut afficher
     if (works.length > 0) {
-    affichageWorks(works);
-}
+        affichageWorks(works);
+    }
 
     // Si on a aussi les catégories, on active les filtres
     if (categories.length > 0 && works.length > 0) {

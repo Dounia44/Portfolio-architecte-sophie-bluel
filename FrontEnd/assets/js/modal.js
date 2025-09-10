@@ -18,25 +18,25 @@ const btnBack = document.querySelector(".modal-back");
 const modalTitle = document.getElementById("titlemodal")
 
 // Formulaire d'ajout
-const fileInput = document.querySelector("#image");			// l’input file
-const titleInput = document.querySelector("#title");		// champ titre
-const categorySelect = document.querySelector("#category");		 // select catégorie
+const fileInput = document.querySelector("#image");
+const titleInput = document.querySelector("#title");
+const categorySelect = document.querySelector("#category");
 const imagePreview = document.querySelector(".image-preview");
 const uploadInfo = document.querySelector(".upload-info");
 const fileErrorMsg = document.querySelector(".file-error-msg");
 
 // Bouton Valider
-const submitButton = document.querySelector(".btn.upload"); // le bouton "Valider"
-submitButton.disabled = true;               // désactivé par défaut
+const submitButton = document.querySelector(".btn.upload");
+submitButton.disabled = true;
 
 /* ---------------------------------------------------------
    Fonction utilitaire pour réinitialiser la preview
 --------------------------------------------------------- */
 function resetPreview() {
-	imagePreview.src = ""; 						// vide la preview
-	imagePreview.classList.add("hidden"); 		// cache l'image
-	uploadInfo.classList.remove("hidden"); 		// réaffiche le texte
-	fileInput.value = ""; 						// reset aussi l’input file
+	imagePreview.src = "";
+	imagePreview.classList.add("hidden");
+	uploadInfo.classList.remove("hidden");
+	fileInput.value = "";
 }
 
 /* ---------------------------------------------------------
@@ -101,9 +101,9 @@ function checkFormValidity() {
    Gestion ouverture/fermeture modale
 --------------------------------------------------------- */
 btnEdition.addEventListener("click", async () => {
-	modal.classList.remove("hidden");                   // Affiche la modale (en retirant "hidden")
-	modal.classList.add("active");                      // Ajoute la classe active pour afficher
-	modal.setAttribute("aria-hidden", "false");        	// Accessibilité : indique que la modale est visible
+	modal.classList.remove("hidden");
+	modal.classList.add("active");
+	modal.setAttribute("aria-hidden", "false");
 	 try {
 		// Récupère les images depuis l’API
         // throw new Error("Test d'erreur");
@@ -166,18 +166,18 @@ function afficherPhotos(photos) {
 --------------------------------------------------------- */
 btnAdd.addEventListener("click", () => {
 
-	modalGalleryView.classList.add("hidden");           // cache la galerie
-	modalForm.classList.remove("hidden");              // affiche le formulaire
-	btnBack.classList.remove("hidden");					// Rend le bouton Retour visible
-	modalTitle.textContent = "Ajout photo"; // CHANGE le titre pour le formulaire
+	modalGalleryView.classList.add("hidden");
+	modalForm.classList.remove("hidden");
+	btnBack.classList.remove("hidden");
+	modalTitle.textContent = "Ajout photo";
 
 	populateCategories();
 });
 
 btnBack.addEventListener("click", () => {
-	modalForm.classList.add("hidden");			  		//cacher le formulaire
-	modalGalleryView.classList.remove("hidden");		//afficher la galerie
-	btnBack.classList.add("hidden");					// Cache le bouton Retour
+	modalForm.classList.add("hidden");
+	modalGalleryView.classList.remove("hidden");
+	btnBack.classList.add("hidden");
 
 	modalTitle.textContent = "Galerie photo"; 
 });
@@ -200,7 +200,6 @@ async function populateCategories() {
 
         //On récupère les catégories depuis l’API
         const categories = await getCategories();
-
         //On crée une option par catégorie
         categories.forEach(cat => {
             const option = document.createElement("option");
@@ -212,20 +211,20 @@ async function populateCategories() {
         console.error("Erreur lors du chargement des catégories :", error);
         alert("Impossible de charger les catégories. Vérifiez votre connexion.");
     }
-    checkFormValidity();                // vérifie le validité du formulaire après remplissage
+    checkFormValidity();
 }
 	
 /* ---------------------------------------------------------
    Gestion suppression projet
 --------------------------------------------------------- */
 function addDeleteListeners() {
-    const btnsDelete = document.querySelectorAll(".btn-delete"); // Tous les boutons
+    const btnsDelete = document.querySelectorAll(".btn-delete");
     btnsDelete.forEach(btn => {
         btn.addEventListener("click", () => {
-            const figure = btn.closest("figure");                   // Récupère la figure correspondante
-            const id = figure.dataset.id;                           // Récupère l'id du projet
-            const token = localStorage.getItem("token");             // Remplace par ton token réel
-            deleteProject(id, figure, token);                       // Supprime le projet
+            const figure = btn.closest("figure");
+            const id = figure.dataset.id;
+            const token = localStorage.getItem("token");
+            deleteProject(id, figure, token);
         });
     });
 }
@@ -235,11 +234,9 @@ async function deleteProject(id, figure, token) {
     try {
         // throw new Error("Test d'erreur");
         const ok = await deleteProjectAPI(id, token);  // Appel API DELETE
-
         if (ok) {
             // Supprime l'élément de la galerie modale si réussi
             figure.remove();
-
 			// Et supprime aussi dans la galerie principale
             const mainFigure = document.querySelector(`.gallery figure[data-id="${id}"]`);
             if(mainFigure) mainFigure.remove();
@@ -256,61 +253,56 @@ async function deleteProject(id, figure, token) {
 /* ---------------------------------------------------------
    Prévisualisation image
 --------------------------------------------------------- */
-fileInput.addEventListener("change", (e) => {	//On écoute quand l'utilisateur sélectionne un fichier
-	 // 2️ Récupère le premier fichier choisi (s'il y en a)
+fileInput.addEventListener("change", (e) => {
 	const file = fileInput.files[0];	 
-	 // 3️ Si aucun fichier n'est sélectionné, on quitte
     if (!file) {
         resetPreview();
         fileErrorMsg.classList.add("hidden");
         checkFormValidity();
         return;
         }
-    // 4️ Crée une URL temporaire pour afficher l'image dans le navigateur
     const imageURL = URL.createObjectURL(file);
-
-    // 5️ Remplace la source de l'image preview par ce fichier
     imagePreview.src = imageURL;
-
-    // 6️ Affiche l'image preview si elle était cachée (par exemple via la classe "hidden")
     imagePreview.classList.remove("hidden");
-
-    // 7️ Optionnel : cache le texte/icone d'instructions
 	uploadInfo.classList.add("hidden");
 
     checkFormValidity(); // <-- vérifie validité à chaque changement
 });
 
-// Vérifier validité aussi quand on tape le titre ou change catégorie
+/* ---------------------------------------------------------
+   Saisie du titre et choix de la catégorie
+--------------------------------------------------------- */
+
+// Vérifier validité du formulaire à chaque saisie du titre
 titleInput.addEventListener("input", checkFormValidity);
+
+// Vérifie la validité à chaque changement de catégorie
 categorySelect.addEventListener("change", checkFormValidity);
 
 /* ---------------------------------------------------------
-   Ajout projet
+   Validation du formulaire
 --------------------------------------------------------- */
-// Fonction qui écoute le submit
+
 export function addAddProjectListeners() {
     const formAdd = document.getElementById("form-add");
     if (!formAdd) return;
-
     formAdd.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const data = new FormData(formAdd);
         const token = localStorage.getItem("token");
         if (!token) {
             console.error("Utilisateur non connecté !");
             return;
         }
-
         await addProjectToGalleries(data, token);
-
-        formAdd.reset(); 
-        resetPreview();         // reset le bouton Valider après soumission
+        formAdd.reset();
+        resetPreview();
     });
 }
 
-//Fonction qui ajoute le projet dans les deux galeries
+/* ---------------------------------------------------------
+   Envoi à l’API et mise à jour des galeries
+--------------------------------------------------------- */
 async function addProjectToGalleries(data, token) {
    let newProject;
     try {
@@ -321,7 +313,6 @@ async function addProjectToGalleries(data, token) {
         alert("Impossible d'ajouter le projet. Vérifiez votre connexion.");
         return;
     }
-    
     if (!newProject) {
         console.error("Erreur lors de l'ajout du projet");
         return;
